@@ -1,5 +1,7 @@
 package hu.eqn34f.retroquiz
 
+
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import hu.eqn34f.retroquiz.databinding.ActivityMainBinding
@@ -13,5 +15,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setButtonListeners();
+    }
+
+
+
+    private fun setButtonListeners(){
+        binding.btnPlay.setOnClickListener {
+            startActivity(Intent(this,DifficultySelectActivity::class.java))
+        }
     }
 }
