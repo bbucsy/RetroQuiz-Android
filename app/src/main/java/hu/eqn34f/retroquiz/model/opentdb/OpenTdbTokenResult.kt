@@ -1,7 +1,13 @@
 package hu.eqn34f.retroquiz.model.opentdb
 
+import com.google.gson.annotations.SerializedName
+
 data class OpenTdbTokenResult(
-    val response_code: Int,
-    val respone_message: String?,
+    @SerializedName("response_code")
+    val responseCode: ResponseCode,
+
+    @SerializedName("response_message")
+    val responseMessage: String?,
+
     val token: String?
 )
