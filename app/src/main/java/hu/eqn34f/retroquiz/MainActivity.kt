@@ -25,5 +25,8 @@ class MainActivity : AppCompatActivity() {
         binding.btnPlay.setOnClickListener {
             startActivity(Intent(this,DifficultySelectActivity::class.java))
         }
+        binding.btnOpions.setOnClickListener {
+            startActivity(Intent(this,SettingsActivity::class.java))
+        }
     }
 }

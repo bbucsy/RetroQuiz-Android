@@ -1,0 +1,25 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/header_gameplay">
+
+        <EditTextPreference
+            android:defaultValue="5"
+            android:key="time_limit"
+            android:inputType="numberDecimal"
+            android:title="Game time limit (minutes)" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/header_categories">
+
+
+        <MultiSelectListPreference
+            android:defaultValue="@array/category_names"
+            android:entries="@array/category_names"
+            android:entryValues="@array/category_codes"
+            android:key="allowed_categories"
+            android:title="Allowed question categories" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

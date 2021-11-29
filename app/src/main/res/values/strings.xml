@@ -10,4 +10,9 @@
     <string name="difficulty_normal">normal</string>
     <string name="difficulty_hard">hard</string>
     <string name="difficulty_adaptive">Adaptive</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="header_gameplay">Gameplay</string>
+    <string name="header_categories">Categories</string>
+
+
 </resources>
