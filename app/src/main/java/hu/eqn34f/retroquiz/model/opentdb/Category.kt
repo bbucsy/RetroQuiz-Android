@@ -3,37 +3,37 @@ package hu.eqn34f.retroquiz.model.opentdb
 import com.google.gson.annotations.SerializedName
 
 enum class Category(val id: Int){
-    @SerializedName("General Knowledge")
+    @SerializedName("General%20Knowledge")
     GeneralKnowledge(9),
 
-    @SerializedName("Entertainment: Books")
+    @SerializedName("Entertainment%3A%20Books")
     Books(10),
 
-    @SerializedName("Entertainment: Film")
+    @SerializedName("Entertainment%3A%20Film")
     Film(11),
 
-    @SerializedName("Entertainment: Music")
+    @SerializedName("Entertainment%3A%20Music")
     Music(12),
 
-    @SerializedName("Entertainment: Musicals & Theatres")
+    @SerializedName("Entertainment%3A%20Musicals%20%26%20Theatres")
     Theater(13),
 
-    @SerializedName("Entertainment: Television")
+    @SerializedName("Entertainment%3A%20Television")
     Television(14),
 
-    @SerializedName("Entertainment: Video Games")
+    @SerializedName("Entertainment%3A%20Video%20Games")
     VideoGames(15),
 
-    @SerializedName("Entertainment: Board Games")
+    @SerializedName("Entertainment%3A%20Board%20Games")
     BoardGames(16),
 
-    @SerializedName("Science & Nature")
+    @SerializedName("Science%20%26%20Nature")
     Nature(17),
 
-    @SerializedName("Science: Computers")
+    @SerializedName("Science%3A%20Computers")
     ComputerScience(18),
 
-    @SerializedName("Science: Mathematics")
+    @SerializedName("Science%3A%20Mathematics")
     Mathematics(19),
 
     @SerializedName("Mythology")
@@ -63,16 +63,16 @@ enum class Category(val id: Int){
     @SerializedName("Vehicles")
     Vehicles(28),
 
-    @SerializedName("Entertainment: Comics")
+    @SerializedName("Entertainment%3A%20Comics")
     Comics(29),
 
-    @SerializedName("Science: Gadgets")
+    @SerializedName("Science%3A%20Gadgets")
     Gadgets(30),
 
-    @SerializedName("Entertainment: Japanese Anime & Manga")
+    @SerializedName("Entertainment%3A%20Japanese%20Anime%20%26%20Manga")
     Anime(31),
 
-    @SerializedName("Entertainment: Cartoon & Animations")
+    @SerializedName("Entertainment%3A%20Cartoon%20%26%20Animations")
     Cartoons(32),
 
 

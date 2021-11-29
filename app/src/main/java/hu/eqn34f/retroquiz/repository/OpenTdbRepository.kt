@@ -1,7 +1,11 @@
 package hu.eqn34f.retroquiz.repository
 
+import android.content.SharedPreferences
+import android.util.Log
+import androidx.preference.PreferenceManager
 import hu.eqn34f.retroquiz.data.OpenTdbNetwork
 import hu.eqn34f.retroquiz.model.GameDifficulty
+import hu.eqn34f.retroquiz.model.opentdb.Category
 import hu.eqn34f.retroquiz.model.opentdb.Difficulty
 import hu.eqn34f.retroquiz.model.opentdb.Question
 import hu.eqn34f.retroquiz.model.opentdb.ResponseCode
@@ -10,9 +14,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import java.lang.Exception
 import java.util.*
+import kotlin.random.Random
 
 class OpenTdbRepository constructor(
-    private val difficulty: GameDifficulty
+    private val difficulty: GameDifficulty,
+    private val allowedCategories: List<Category>
 ) {
 
     private val api = OpenTdbNetwork.api
@@ -24,13 +30,26 @@ class OpenTdbRepository constructor(
         sessionToken = result.token
     }
 
+    fun getRandomCategory(): Category {
+        return if (allowedCategories.isEmpty())
+            Category.GeneralKnowledge
+        else
+            allowedCategories[Random.nextInt(allowedCategories.size)]
+    }
 
     suspend fun getNextQuestion(playerScore: Int): Result<Question> = kotlin.runCatching {
         GlobalScope.async(Dispatchers.IO) {
             if (sessionToken == null) refreshToken()
 
+
+            val diff = getQuestionDifficulty(playerScore)
+            val category = getRandomCategory()
             //get result
-            val result = api.getQuestions(getQuestionDifficulty(playerScore).value, sessionToken)
+            val result = api.getQuestions(
+                diffuculty = diff.value,
+                category = category.id,
+                token = sessionToken
+            )
 
             if (result.responseCode == ResponseCode.Success && result.results.isNotEmpty())
             // request is successful, return question
@@ -54,7 +73,7 @@ class OpenTdbRepository constructor(
             GameDifficulty.ADAPTIVE -> {
                 when {
                     playerScore <= 4 -> Difficulty.EASY
-                    playerScore <= 12 -> Difficulty.NORMAL
+                    playerScore <= 16 -> Difficulty.NORMAL
                     else -> Difficulty.HARD
                 }
             }

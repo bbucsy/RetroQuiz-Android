@@ -14,5 +14,7 @@
     <string name="header_gameplay">Gameplay</string>
     <string name="header_categories">Categories</string>
 
+    <string name="time_format">%1$02d:%2$02d</string>
+    <string name="game_time_title">Game time limit (minutes)</string>
 
 </resources>

@@ -20,7 +20,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal"
-        android:weightSum="2">
+        android:weightSum="3">
 
         <TextView
             android:id="@+id/txtScore"
@@ -29,6 +29,15 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="Score: 0"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/txtTime"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            tools:text="5:00"
             android:textSize="20sp" />
 
         <TextView

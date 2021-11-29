@@ -7,7 +7,7 @@
             android:defaultValue="5"
             android:key="time_limit"
             android:inputType="numberDecimal"
-            android:title="Game time limit (minutes)" />
+            android:title="@string/game_time_title" />
 
     </PreferenceCategory>
 
@@ -15,7 +15,7 @@
 
 
         <MultiSelectListPreference
-            android:defaultValue="@array/category_names"
+            android:defaultValue="@array/category_codes"
             android:entries="@array/category_names"
             android:entryValues="@array/category_codes"
             android:key="allowed_categories"

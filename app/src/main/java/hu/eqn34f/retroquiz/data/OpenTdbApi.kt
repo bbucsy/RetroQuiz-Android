@@ -10,6 +10,7 @@ interface OpenTdbApi {
     @GET("api.php")
     suspend fun getQuestions(
         @Query("difficulty") diffuculty: String,
+        @Query("category") category: Int,
         @Query("token") token: String?,
         @Query("amount") amount: Int = 1,
         @Query("encode") encoding: String = "url3986"

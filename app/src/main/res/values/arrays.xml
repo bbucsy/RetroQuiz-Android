@@ -1,7 +1,6 @@
 <resources>
     <!-- Game categories -->
     <string-array name="category_names">
-        <item>General Knowledge</item>
         <item>Entertainment: Books</item>
         <item>Entertainment: Film</item>
         <item>Entertainment: Music</item>
@@ -27,7 +26,6 @@
         <item>Entertainment: Cartoon &amp; Animations</item>
     </string-array>
     <string-array name="category_codes">
-        <item>9</item>
         <item>10</item>
         <item>11</item>
         <item>12</item>
@@ -51,6 +49,9 @@
         <item>30</item>
         <item>31</item>
         <item>32</item>
+
+    </string-array>
+    <string-array name="empty_array">
 
     </string-array>
 </resources>

@@ -2,12 +2,15 @@ package hu.eqn34f.retroquiz
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import androidx.preference.PreferenceManager
 import hu.eqn34f.retroquiz.databinding.ActivityGameBinding
 import hu.eqn34f.retroquiz.fragment.AnswerDialogFragment
 import hu.eqn34f.retroquiz.model.GameDifficulty
+import hu.eqn34f.retroquiz.model.opentdb.Category
 import hu.eqn34f.retroquiz.model.opentdb.Question
 import hu.eqn34f.retroquiz.model.opentdb.QuestionType
 import hu.eqn34f.retroquiz.repository.OpenTdbRepository
@@ -30,13 +33,11 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
 
     private var playerScore: Int = 0
 
-    // only for adaptive games
-    private var levelScore: Int = 0
-
     private var level: Int = 0;
 
     private lateinit var buttonList: List<Button>
 
+    private lateinit var timer: CountDownTimer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,13 +45,53 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
         setContentView(binding.root)
         difficulty = intent.getEnumExtra<GameDifficulty>() ?: GameDifficulty.ADAPTIVE
 
-        repository = OpenTdbRepository(difficulty)
-        setUpButtonListeners()
+        SetupRepository()
+        SetUpButtonListeners()
+        SetupTimer()
         NextQuestion()
     }
 
+    private fun SetupRepository(){
 
-    private fun setUpButtonListeners() {
+        // general knowlage must be in the set, and it can't be disabled in the settings
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val allowedCategories = prefs.getStringSet("allowed_categories", mutableSetOf())
+            ?.map { cat ->
+                // use elvis operator and General knowlege for null safety
+                Category.values().find { it.id.toString() == cat }?: Category.GeneralKnowledge
+            }?: listOf<Category>()
+            .toMutableList()
+            .apply { add(Category.GeneralKnowledge) }
+            .distinct()
+            .toList()
+
+
+
+        repository = OpenTdbRepository(difficulty,allowedCategories)
+    }
+
+    private fun SetupTimer() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val timeInMinutes = (prefs.getString("time_limit","6")?.toIntOrNull()) ?: 6
+        val timeFormat = resources.getString(R.string.time_format);
+        timer = object:CountDownTimer((timeInMinutes * 60000).toLong(), 1000){
+            override fun onTick(p0: Long) {
+                val totalSeconds = p0 / 1000;
+                val minutes = totalSeconds / 60;
+                val seconds = totalSeconds % 60;
+                binding.txtTime.text = String.format(timeFormat,minutes,seconds)
+            }
+
+            override fun onFinish() {
+                AnswerDialogFragment(AnswerDialogFragment.DialogState.TimeUp).show(
+                    supportFragmentManager, AnswerDialogFragment.TAG
+                )
+            }
+        }.start()
+    }
+
+
+    private fun SetUpButtonListeners() {
         buttonList = listOf(binding.btnA, binding.btnB, binding.btnC, binding.btnD)
 
         buttonList.forEach {
@@ -59,13 +100,15 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
                 if (answer != null) {
                     if (answer.correct) {
                         playerScore += answer.question.points
-                        levelScore += answer.question.points
                         AnswerDialogFragment(AnswerDialogFragment.DialogState.RightAnswer).show(
                             supportFragmentManager, AnswerDialogFragment.TAG
                         )
                     } else {
-                        levelScore -= answer.question.points
-                        AnswerDialogFragment(AnswerDialogFragment.DialogState.WrongAnswer, answer.question.correctAnswer.urlDecoded()).show(
+                        playerScore -= answer.question.points
+                        AnswerDialogFragment(
+                            AnswerDialogFragment.DialogState.WrongAnswer,
+                            answer.question.correctAnswer.urlDecoded()
+                        ).show(
                             supportFragmentManager, AnswerDialogFragment.TAG
                         )
                     }
@@ -84,7 +127,13 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
 
         //prepare answers
         answerList = mutableListOf(Answer(question.correctAnswer.urlDecoded(), true, question))
-        answerList.addAll(question.incorrectAnswers.map { Answer(it.urlDecoded(), false, question) })
+        answerList.addAll(question.incorrectAnswers.map {
+            Answer(
+                it.urlDecoded(),
+                false,
+                question
+            )
+        })
         answerList.shuffle()
 
         //show buttons
@@ -109,7 +158,7 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
             buttonList.forEach { it.isEnabled = false }
 
             // get questions
-            val questionResult = repository.getNextQuestion(levelScore)
+            val questionResult = repository.getNextQuestion(playerScore)
             if (questionResult.isFailure) {
                 Log.w("REPOSITORY", "Error with repository")
             } else if (questionResult.isSuccess) {
