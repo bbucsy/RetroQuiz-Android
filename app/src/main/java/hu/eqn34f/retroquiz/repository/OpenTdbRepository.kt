@@ -11,18 +11,12 @@ import kotlinx.coroutines.async
 import java.lang.Exception
 import java.util.*
 
-class OpenTdbException(val responseCode: ResponseCode, val shouldRetry: Boolean = false) : Exception("OpenTdb throwm error")
-
 class OpenTdbRepository constructor(
     private val difficulty: GameDifficulty
 ) {
 
     private val api = OpenTdbNetwork.api
     private var sessionToken: String? = null;
-
-    companion object {
-        val REQUEST_TRIES = 3
-    }
 
 
     suspend fun refreshToken() {
@@ -39,19 +33,18 @@ class OpenTdbRepository constructor(
             val result = api.getQuestions(getQuestionDifficulty(playerScore).value, sessionToken)
 
             if (result.responseCode == ResponseCode.Success && result.results.isNotEmpty())
-            // request is successful, return questiom
+            // request is successful, return question
                 return@async result.results.first()
             else if (result.responseCode == ResponseCode.TokenNotFound || result.responseCode == ResponseCode.TokenEmpty) {
                 // Something went wrong with token, it expired or all questions where asked
                 // client should try again after renewing the token
                 refreshToken()
-                throw OpenTdbException(result.responseCode, shouldRetry = true)
+                throw Exception("Error getting question from db")
             } else
-                throw OpenTdbException(result.responseCode)
+                throw Exception("Error getting question from db")
 
         }.await();
     }
-
 
     private fun getQuestionDifficulty(playerScore: Int): Difficulty {
         return when (difficulty) {

@@ -12,5 +12,15 @@ data class Question(
     val correctAnswer : String,
 
     @SerializedName("incorrect_answers")
-    val incorrectAnswers : List<String>
+    val incorrectAnswers : List<String>,
 )
+{
+    val points: Int
+        get() {
+            return when(difficulty){
+                Difficulty.NORMAL -> 3
+                Difficulty.EASY -> 2
+                Difficulty.HARD -> 5
+            }
+        }
+}
