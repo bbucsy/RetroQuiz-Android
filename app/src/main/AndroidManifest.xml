@@ -13,6 +13,7 @@
         android:theme="@style/Theme.RetroQuiz">
         <activity
             android:name=".HighScoreActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".SettingsActivity"
