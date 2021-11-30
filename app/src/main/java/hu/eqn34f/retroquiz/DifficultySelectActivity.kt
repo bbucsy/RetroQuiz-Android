@@ -4,8 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import hu.eqn34f.retroquiz.databinding.ActivityDifficultySelectBinding
-import hu.eqn34f.retroquiz.model.GameDifficulty
-import hu.eqn34f.retroquiz.model.opentdb.Difficulty
+import hu.eqn34f.retroquiz.data.model.GameDifficulty
 import hu.eqn34f.retroquiz.utils.putExtra
 
 class DifficultySelectActivity : AppCompatActivity() {

@@ -9,6 +9,14 @@
             android:inputType="numberDecimal"
             android:title="@string/game_time_title" />
 
+
+
+        <EditTextPreference
+            android:defaultValue="John Doe"
+            android:key="player_name"
+            android:inputType="text"
+            android:title="@string/game_player_name_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/header_categories">

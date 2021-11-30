@@ -3,16 +3,18 @@ package hu.eqn34f.retroquiz.utils
 import android.os.CountDownTimer
 
 abstract class PausableCountDownTimer(
-    millisInFuture: Long, val countDownInterval: Long,
-    ) {
+    val timeInMinutes: Int, val countDownInterval: Long = 1000,
+) {
 
-    private var remaining = millisInFuture
+
+    private var remaining = (timeInMinutes * 60000).toLong()
     private var isPaused = false
+
 
     private var timer: CountDownTimer
 
     init {
-        timer = createTimer(millisInFuture).start()
+        timer = createTimer(remaining).start()
     }
 
 

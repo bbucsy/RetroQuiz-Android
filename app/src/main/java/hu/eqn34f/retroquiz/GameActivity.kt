@@ -1,27 +1,32 @@
 package hu.eqn34f.retroquiz
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
+import hu.eqn34f.retroquiz.data.HighScoreDatabase
+import hu.eqn34f.retroquiz.data.OpenTdbRepository
+import hu.eqn34f.retroquiz.data.model.GameDifficulty
+import hu.eqn34f.retroquiz.data.model.HighScore
+import hu.eqn34f.retroquiz.data.model.opentdb.Category
+import hu.eqn34f.retroquiz.data.model.opentdb.Question
+import hu.eqn34f.retroquiz.data.model.opentdb.QuestionType
 import hu.eqn34f.retroquiz.databinding.ActivityGameBinding
 import hu.eqn34f.retroquiz.fragment.AnswerDialogFragment
 import hu.eqn34f.retroquiz.fragment.NetworkErrorDialogFragment
-import hu.eqn34f.retroquiz.model.GameDifficulty
-import hu.eqn34f.retroquiz.model.opentdb.Category
-import hu.eqn34f.retroquiz.model.opentdb.Question
-import hu.eqn34f.retroquiz.model.opentdb.QuestionType
-import hu.eqn34f.retroquiz.repository.OpenTdbRepository
 import hu.eqn34f.retroquiz.utils.PausableCountDownTimer
 import hu.eqn34f.retroquiz.utils.getEnumExtra
 import hu.eqn34f.retroquiz.utils.urlDecoded
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlin.concurrent.thread
 
 
-class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragmentListener, NetworkErrorDialogFragment.NetworkErrorDialogListener {
+class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragmentListener,
+    NetworkErrorDialogFragment.NetworkErrorDialogListener {
 
     private lateinit var binding: ActivityGameBinding
 
@@ -33,33 +38,36 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
 
     private var playerScore: Int = 0
 
-    private var level: Int = 0;
+    private var level: Int = 0
 
     private lateinit var buttonList: List<Button>
 
     private lateinit var timer: PausableCountDownTimer
+
+    private lateinit var prefs: SharedPreferences
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
         difficulty = intent.getEnumExtra<GameDifficulty>() ?: GameDifficulty.ADAPTIVE
-
+        prefs = PreferenceManager.getDefaultSharedPreferences(this)
         SetupRepository()
         SetUpButtonListeners()
         SetupTimer()
         NextQuestion()
     }
 
-    private fun SetupRepository(){
+    private fun SetupRepository() {
 
-        // general knowlage must be in the set, and it can't be disabled in the settings
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        // general knowledge must be in the set, and it can't be disabled in the settings
+
         val allowedCategories = prefs.getStringSet("allowed_categories", mutableSetOf())
             ?.map { cat ->
-                // use elvis operator and General knowlege for null safety
-                Category.values().find { it.id.toString() == cat }?: Category.GeneralKnowledge
-            }?: listOf<Category>()
+                // use elvis operator and General knowledge for null safety
+                Category.values().find { it.id.toString() == cat } ?: Category.GeneralKnowledge
+            } ?: listOf<Category>()
             .toMutableList()
             .apply { add(Category.GeneralKnowledge) }
             .distinct()
@@ -67,19 +75,18 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
 
 
 
-        repository = OpenTdbRepository(difficulty,allowedCategories)
+        repository = OpenTdbRepository(difficulty, allowedCategories)
     }
 
     private fun SetupTimer() {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val timeInMinutes = (prefs.getString("time_limit","6")?.toIntOrNull()) ?: 6
-        val timeFormat = resources.getString(R.string.time_format);
-        timer = object: PausableCountDownTimer((timeInMinutes * 60000).toLong(), 1000){
+        val timeInMinutes = (prefs.getString("time_limit", "6")?.toIntOrNull()) ?: 6
+        val timeFormat = resources.getString(R.string.time_format)
+        timer = object : PausableCountDownTimer(timeInMinutes, 1000) {
             override fun onTick(p0: Long) {
-                val totalSeconds = p0 / 1000;
-                val minutes = totalSeconds / 60;
-                val seconds = totalSeconds % 60;
-                binding.txtTime.text = String.format(timeFormat,minutes,seconds)
+                val totalSeconds = p0 / 1000
+                val minutes = totalSeconds / 60
+                val seconds = totalSeconds % 60
+                binding.txtTime.text = String.format(timeFormat, minutes, seconds)
             }
 
             override fun onFinish() {
@@ -122,9 +129,9 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
 
     private fun ShowQuestion(question: Question) {
         // show question text
-        binding.txtDifficulty.text = question.difficulty.name;
+        binding.txtDifficulty.text = question.difficulty.name
         binding.txtLevel.text = level.toString()
-        binding.txtQuestion.text = question.question.urlDecoded();
+        binding.txtQuestion.text = question.question.urlDecoded()
 
         //prepare answers
         answerList = mutableListOf(Answer(question.correctAnswer.urlDecoded(), true, question))
@@ -161,9 +168,9 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
             // get questions
             val questionResult = repository.getNextQuestion(playerScore)
             if (questionResult.isFailure) {
-                    NetworkErrorDialogFragment(questionResult.exceptionOrNull()).show(
-                        supportFragmentManager, NetworkErrorDialogFragment.TAG
-                    )
+                NetworkErrorDialogFragment(questionResult.exceptionOrNull()).show(
+                    supportFragmentManager, NetworkErrorDialogFragment.TAG
+                )
             } else if (questionResult.isSuccess) {
                 val question = questionResult.getOrNull()
                 ShowQuestion(question!!)
@@ -188,7 +195,20 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
         NextQuestion()
     }
 
-    override fun onExit() {
-        finish()
+    override fun onFinishGame() {
+        thread {
+            val db = HighScoreDatabase.getDatabase(applicationContext).HighScoreDao()
+            db.insert(
+                HighScore(
+                    name = prefs.getString("player_name", null) ?: "John Doe",
+                    score = playerScore,
+                    time = timer.timeInMinutes
+                )
+            )
+            runOnUiThread {
+                finish()
+            }
+        }
     }
+
 }

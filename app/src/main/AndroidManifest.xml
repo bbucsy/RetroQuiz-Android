@@ -12,10 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RetroQuiz">
         <activity
+            android:name=".HighScoreActivity"
+            android:exported="true" />
+        <activity
             android:name=".SettingsActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
-            android:label="@string/title_activity_settings" />
         <activity
             android:name=".GameActivity"
             android:exported="true"

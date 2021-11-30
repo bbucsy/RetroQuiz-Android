@@ -28,5 +28,8 @@ class MainActivity : AppCompatActivity() {
         binding.btnOpions.setOnClickListener {
             startActivity(Intent(this,SettingsActivity::class.java))
         }
+        binding.btnHighscore.setOnClickListener {
+            startActivity(Intent(this,HighScoreActivity::class.java))
+        }
     }
 }

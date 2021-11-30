@@ -1,4 +1,4 @@
-package hu.eqn34f.retroquiz.model
+package hu.eqn34f.retroquiz.data.model
 
 enum class GameDifficulty {
     EASY,

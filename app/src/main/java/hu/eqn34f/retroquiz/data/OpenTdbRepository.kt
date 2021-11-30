@@ -1,14 +1,10 @@
-package hu.eqn34f.retroquiz.repository
+package hu.eqn34f.retroquiz.data
 
-import android.content.SharedPreferences
-import android.util.Log
-import androidx.preference.PreferenceManager
-import hu.eqn34f.retroquiz.data.OpenTdbNetwork
-import hu.eqn34f.retroquiz.model.GameDifficulty
-import hu.eqn34f.retroquiz.model.opentdb.Category
-import hu.eqn34f.retroquiz.model.opentdb.Difficulty
-import hu.eqn34f.retroquiz.model.opentdb.Question
-import hu.eqn34f.retroquiz.model.opentdb.ResponseCode
+import hu.eqn34f.retroquiz.data.model.GameDifficulty
+import hu.eqn34f.retroquiz.data.model.opentdb.Category
+import hu.eqn34f.retroquiz.data.model.opentdb.Difficulty
+import hu.eqn34f.retroquiz.data.model.opentdb.Question
+import hu.eqn34f.retroquiz.data.model.opentdb.ResponseCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async

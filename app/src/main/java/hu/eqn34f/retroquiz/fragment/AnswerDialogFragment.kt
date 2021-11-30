@@ -12,7 +12,7 @@ import hu.eqn34f.retroquiz.databinding.DialogAnswerBinding
 class AnswerDialogFragment(val state: DialogState,val correct: String = "") : DialogFragment() {
     interface AnswerDialogFragmentListener {
         fun onNextQuestion()
-        fun onExit()
+        fun onFinishGame()
     }
 
     enum class DialogState {
@@ -45,8 +45,11 @@ class AnswerDialogFragment(val state: DialogState,val correct: String = "") : Di
         val dialog =  AlertDialog.Builder(requireContext())
             .setTitle(getTitle())
             .setView(binding.root)
+            .setOnCancelListener{
+                listener.onNextQuestion()
+            }
             .setNegativeButton("Main Menu") { _, _ ->
-                listener.onExit()
+                listener.onFinishGame()
             }
 
         if(state != DialogState.TimeUp)
@@ -55,13 +58,13 @@ class AnswerDialogFragment(val state: DialogState,val correct: String = "") : Di
             }
 
 
-        return dialog.create()
+        return dialog.create().apply { setCanceledOnTouchOutside(false) }
     }
 
 
     private fun getMainText(): String {
         return when (state) {
-            DialogState.RightAnswer -> "Your answer was correct!"
+            AnswerDialogFragment.DialogState.RightAnswer -> "Your answer was correct!"
             DialogState.WrongAnswer -> "Your answer was wrong!"
             DialogState.TimeUp -> "Your time is up"
         }

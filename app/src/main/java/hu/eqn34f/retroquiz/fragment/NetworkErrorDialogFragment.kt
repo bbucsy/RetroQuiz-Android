@@ -13,7 +13,7 @@ import hu.eqn34f.retroquiz.databinding.DialogNetworkErrorBinding
 class NetworkErrorDialogFragment(val errorMessage: Throwable?) : DialogFragment() {
     interface NetworkErrorDialogListener {
         fun onRetry()
-        fun onExit()
+        fun onFinishGame()
     }
 
 
@@ -43,12 +43,16 @@ class NetworkErrorDialogFragment(val errorMessage: Throwable?) : DialogFragment(
         return AlertDialog.Builder(requireContext())
             .setTitle(resources.getString(R.string.network_error_title))
             .setView(binding.root)
+            .setCancelable(false)
+            .setOnCancelListener {
+                listener.onRetry()
+            }
             .setPositiveButton(R.string.dialog_retry) { _, _ ->
                 listener.onRetry()
             }
             .setNegativeButton("Main Menu") { _, _ ->
-                listener.onExit()
-            }.create()
+                listener.onFinishGame()
+            }.create().apply { setCanceledOnTouchOutside(false) }
     }
 
 

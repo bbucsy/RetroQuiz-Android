@@ -22,5 +22,6 @@
     <string name="dialog_retry">Retry</string>
     <string name="dialog_next">Next question</string>
     <string name="btn_show_error_message">Show error message</string>
+    <string name="game_player_name_title">Player Name</string>
 
 </resources>
