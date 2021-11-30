@@ -24,10 +24,10 @@ class MainActivity : AppCompatActivity() {
         binding.btnPlay.setOnClickListener {
             startActivity(Intent(this, DifficultySelectActivity::class.java))
         }
-        binding.btnOpions.setOnClickListener {
+        binding.btnOptions.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
-        binding.btnHighscore.setOnClickListener {
+        binding.btnHighScore.setOnClickListener {
             startActivity(Intent(this, HighScoreActivity::class.java))
         }
     }
