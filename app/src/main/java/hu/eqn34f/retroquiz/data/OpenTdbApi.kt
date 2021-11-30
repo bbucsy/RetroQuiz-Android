@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface OpenTdbApi {
     @GET("api.php")
     suspend fun getQuestions(
-        @Query("difficulty") diffuculty: String,
+        @Query("difficulty") difficulty: String,
         @Query("category") category: Int,
         @Query("token") token: String?,
         @Query("amount") amount: Int = 1,

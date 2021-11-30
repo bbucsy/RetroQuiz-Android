@@ -1,16 +1,18 @@
 package hu.eqn34f.retroquiz.adapter
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import hu.eqn34f.retroquiz.R
 import hu.eqn34f.retroquiz.data.model.HighScore
 import hu.eqn34f.retroquiz.databinding.ItemHighScoreBinding
 
-class HighScoreAdapter : RecyclerView.Adapter<HighScoreAdapter.HighScoreViewHolder>() {
+class HighScoreAdapter(private val context: Context) : RecyclerView.Adapter<HighScoreAdapter.HighScoreViewHolder>() {
 
     private val scores = mutableListOf<HighScore>()
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HighScoreViewHolder =
         HighScoreViewHolder(
@@ -30,7 +32,7 @@ class HighScoreAdapter : RecyclerView.Adapter<HighScoreAdapter.HighScoreViewHold
 
             if(position == 0 || item.time != scores[position-1].time){
                 header.visibility = View.VISIBLE
-                headerText.text = "${item.time.toString()} min"
+                headerText.text = String.format(context.getString(R.string.highscore_time_category_format),item.time)
             }
             else{
                 header.visibility = View.GONE
@@ -41,6 +43,7 @@ class HighScoreAdapter : RecyclerView.Adapter<HighScoreAdapter.HighScoreViewHold
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     fun update(highscores: List<HighScore>) {
         scores.apply {
             clear()

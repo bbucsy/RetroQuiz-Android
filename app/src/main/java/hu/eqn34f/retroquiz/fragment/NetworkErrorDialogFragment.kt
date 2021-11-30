@@ -10,7 +10,7 @@ import androidx.fragment.app.DialogFragment
 import hu.eqn34f.retroquiz.R
 import hu.eqn34f.retroquiz.databinding.DialogNetworkErrorBinding
 
-class NetworkErrorDialogFragment(val errorMessage: Throwable?) : DialogFragment() {
+class NetworkErrorDialogFragment(private val errorMessage: Throwable?) : DialogFragment() {
     interface NetworkErrorDialogListener {
         fun onRetry()
         fun onFinishGame()
@@ -50,7 +50,7 @@ class NetworkErrorDialogFragment(val errorMessage: Throwable?) : DialogFragment(
             .setPositiveButton(R.string.dialog_retry) { _, _ ->
                 listener.onRetry()
             }
-            .setNegativeButton("Main Menu") { _, _ ->
+            .setNegativeButton(R.string.dialog_exit) { _, _ ->
                 listener.onFinishGame()
             }.create().apply { setCanceledOnTouchOutside(false) }
     }

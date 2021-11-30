@@ -16,7 +16,7 @@ abstract class HighScoreDatabase: RoomDatabase() {
                 applicationContext,
                 HighScoreDatabase::class.java,
                 "highscore"
-            ).build();
+            ).build()
         }
     }
 

@@ -25,7 +25,7 @@ class HighScoreActivity : AppCompatActivity() {
 
 
     private fun initRecyclerView() {
-        adapter = HighScoreAdapter()
+        adapter = HighScoreAdapter(this)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
         loadItemsInBackground()

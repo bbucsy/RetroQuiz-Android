@@ -38,7 +38,7 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
 
     private var playerScore: Int = 0
 
-    private var level: Int = 0
+    private var questionNumber: Int = 1
 
     private lateinit var buttonList: List<Button>
 
@@ -51,18 +51,23 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
         difficulty = intent.getEnumExtra<GameDifficulty>() ?: GameDifficulty.ADAPTIVE
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        SetupRepository()
-        SetUpButtonListeners()
-        SetupTimer()
-        NextQuestion()
+
+        binding.txtScore.text = String.format( getString(R.string.game_score_format), playerScore)
+
+        setupRepository()
+        setUpButtonListeners()
+        setupTimer()
+        nextQuestion()
     }
 
-    private fun SetupRepository() {
+    //set up question repository with the allowed categories and difficulty setting
+    private fun setupRepository() {
 
         // general knowledge must be in the set, and it can't be disabled in the settings
-
         val allowedCategories = prefs.getStringSet("allowed_categories", mutableSetOf())
             ?.map { cat ->
                 // use elvis operator and General knowledge for null safety
@@ -73,23 +78,27 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
             .distinct()
             .toList()
 
-
-
         repository = OpenTdbRepository(difficulty, allowedCategories)
     }
 
-    private fun SetupTimer() {
+    // create timer for game
+    private fun setupTimer() {
+        // get time limit from settings
         val timeInMinutes = (prefs.getString("time_limit", "6")?.toIntOrNull()) ?: 6
         val timeFormat = resources.getString(R.string.time_format)
+
+        // create a timer object and override the onTick and on Finish functions to display time
         timer = object : PausableCountDownTimer(timeInMinutes, 1000) {
             override fun onTick(p0: Long) {
                 val totalSeconds = p0 / 1000
                 val minutes = totalSeconds / 60
                 val seconds = totalSeconds % 60
+                // display the time in the specified format
                 binding.txtTime.text = String.format(timeFormat, minutes, seconds)
             }
 
             override fun onFinish() {
+                // show end game dialog
                 AnswerDialogFragment(AnswerDialogFragment.DialogState.TimeUp).show(
                     supportFragmentManager, AnswerDialogFragment.TAG
                 )
@@ -98,20 +107,25 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
     }
 
 
-    private fun SetUpButtonListeners() {
+    private fun setUpButtonListeners() {
         buttonList = listOf(binding.btnA, binding.btnB, binding.btnC, binding.btnD)
 
         buttonList.forEach {
             it.setOnClickListener { btn ->
+                // pause timer, so its not ticking while showing the answer dialog
                 timer.pause()
+
+                //get answer from tag
                 val answer = btn.tag as? Answer
                 if (answer != null) {
                     if (answer.correct) {
+                        // correct answer, add points and show dialog
                         playerScore += answer.question.points
                         AnswerDialogFragment(AnswerDialogFragment.DialogState.RightAnswer).show(
                             supportFragmentManager, AnswerDialogFragment.TAG
                         )
                     } else {
+                        // incorrect answer, remove points and show dialog
                         playerScore -= answer.question.points
                         AnswerDialogFragment(
                             AnswerDialogFragment.DialogState.WrongAnswer,
@@ -122,15 +136,16 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
                     }
                 }
                 // update score ui
-                binding.txtScore.text = "Score:${playerScore}"
+                binding.txtScore.text = String.format( getString(R.string.game_score_format), playerScore)
             }
         }
     }
 
-    private fun ShowQuestion(question: Question) {
+    private fun showQuestion(question: Question) {
         // show question text
         binding.txtDifficulty.text = question.difficulty.name
-        binding.txtLevel.text = level.toString()
+        binding.txtLevel.text =
+            String.format(resources.getString(R.string.level_text_format), questionNumber)
         binding.txtQuestion.text = question.question.urlDecoded()
 
         //prepare answers
@@ -142,9 +157,10 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
                 question
             )
         })
+        //shuffle the answers
         answerList.shuffle()
 
-        //show buttons
+        //hide last two buttons if question is not multiple choice
         binding.btnC.visibility =
             if (question.type == QuestionType.MultipleAnswer) View.VISIBLE else View.INVISIBLE
         binding.btnD.visibility =
@@ -155,10 +171,11 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
             buttonList[index].text = answer.text
             buttonList[index].tag = answer
         }
+
         timer.resume()
     }
 
-    private fun NextQuestion() {
+    private fun nextQuestion() {
         GlobalScope.launch(Dispatchers.Main) {
             // show loading screen
             timer.pause()
@@ -167,13 +184,15 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
 
             // get questions
             val questionResult = repository.getNextQuestion(playerScore)
-            if (questionResult.isFailure) {
+            if (questionResult.isSuccess) {
+                //show question
+                val question = questionResult.getOrNull()
+                showQuestion(question!!)
+            } else {
+                //show error dialog
                 NetworkErrorDialogFragment(questionResult.exceptionOrNull()).show(
                     supportFragmentManager, NetworkErrorDialogFragment.TAG
                 )
-            } else if (questionResult.isSuccess) {
-                val question = questionResult.getOrNull()
-                ShowQuestion(question!!)
             }
 
 
@@ -183,19 +202,20 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
         }
     }
 
-
+    //This is attached to a button, so the listener knows if the answer was right
     data class Answer(val text: String, val correct: Boolean, val question: Question)
 
     override fun onNextQuestion() {
-        level++
-        NextQuestion()
+        questionNumber++
+        nextQuestion()
     }
 
     override fun onRetry() {
-        NextQuestion()
+        nextQuestion()
     }
 
     override fun onFinishGame() {
+        //save score in db
         thread {
             val db = HighScoreDatabase.getDatabase(applicationContext).HighScoreDao()
             db.insert(

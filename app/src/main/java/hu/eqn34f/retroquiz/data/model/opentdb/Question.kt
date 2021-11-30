@@ -15,6 +15,7 @@ data class Question(
     val incorrectAnswers : List<String>,
 )
 {
+    //returns the value of the question based on difficulty
     val points: Int
         get() {
             return when(difficulty){

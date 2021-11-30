@@ -13,7 +13,7 @@
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="header_gameplay">Gameplay</string>
     <string name="header_categories">Categories</string>
-
+    <string name="level_text_format">Question# %s</string>
     <string name="time_format">%1$02d:%2$02d</string>
     <string name="game_time_title">Game time limit (minutes)</string>
     <string name="network_error_opentdb">There was an error while requesting a question from Open Trivia DB. Do you wish to retry?</string>
@@ -24,5 +24,13 @@
     <string name="btn_show_error_message">Show error message</string>
     <string name="game_player_name_title">Player Name</string>
     <string name="retro_quiz_logo">Retro Quiz</string>
+    <string name="dialog_text_correct">Your answer was correct!</string>
+    <string name="dialog_text_wrong">Your answer was wrong!</string>
+    <string name="dialog_text_timeup">Your time is up</string>
+    <string name="game_score_format">Score: %s</string>
+    <string name="dialog_title_correct">Congratulations</string>
+    <string name="dialog_title_wrong">Not enough Time</string>
+    <string name="dialog_title_timeup">Oops</string>
+    <string name="highscore_time_category_format">%s min</string>
 
 </resources>

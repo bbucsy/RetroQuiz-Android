@@ -17,15 +17,15 @@ class OpenTdbRepository constructor(
 ) {
 
     private val api = OpenTdbNetwork.api
-    private var sessionToken: String? = null;
+    private var sessionToken: String? = null
 
 
-    suspend fun refreshToken() {
+    private suspend fun refreshToken() {
         val result = api.getToken()
         sessionToken = result.token
     }
 
-    fun getRandomCategory(): Category {
+    private fun getRandomCategory(): Category {
         return if (allowedCategories.isEmpty())
             Category.GeneralKnowledge
         else
@@ -34,14 +34,16 @@ class OpenTdbRepository constructor(
 
     suspend fun getNextQuestion(playerScore: Int): Result<Question> = kotlin.runCatching {
         GlobalScope.async(Dispatchers.IO) {
+            //refresh token if there isn't one set
             if (sessionToken == null) refreshToken()
 
 
             val diff = getQuestionDifficulty(playerScore)
             val category = getRandomCategory()
+
             //get result
             val result = api.getQuestions(
-                diffuculty = diff.value,
+                difficulty = diff.value,
                 category = category.id,
                 token = sessionToken
             )
@@ -53,11 +55,11 @@ class OpenTdbRepository constructor(
                 // Something went wrong with token, it expired or all questions where asked
                 // client should try again after renewing the token
                 refreshToken()
-                throw Exception("Error getting question from db")
+                throw Exception("OpenTdb token error")
             } else
                 throw Exception("Error getting question from db")
 
-        }.await();
+        }.await()
     }
 
     private fun getQuestionDifficulty(playerScore: Int): Difficulty {
