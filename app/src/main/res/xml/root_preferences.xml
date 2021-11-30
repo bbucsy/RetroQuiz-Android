@@ -5,16 +5,15 @@
 
         <EditTextPreference
             android:defaultValue="5"
-            android:key="time_limit"
             android:inputType="numberDecimal"
+            android:key="time_limit"
             android:title="@string/game_time_title" />
-
 
 
         <EditTextPreference
             android:defaultValue="John Doe"
-            android:key="player_name"
             android:inputType="text"
+            android:key="player_name"
             android:title="@string/game_player_name_title" />
 
     </PreferenceCategory>

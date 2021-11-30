@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:indeterminate="true"
-        />
+        android:indeterminate="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,7 +58,7 @@
         tools:text="Question #0"
         android:gravity="center"
         android:textSize="24sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/txtQuestion"
@@ -80,12 +79,14 @@
         android:gravity="center"
         android:paddingHorizontal="15dp"
         android:orientation="vertical">
+
         <Button
             android:id="@+id/btnA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Button A"/>
+            tools:text="Button A" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -93,12 +94,14 @@
         android:gravity="center"
         android:paddingHorizontal="15dp"
         android:orientation="vertical">
+
         <Button
             android:id="@+id/btnB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Button B"/>
+            tools:text="Button B" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -113,6 +116,7 @@
             android:layout_height="wrap_content"
             tools:text="Button C" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -120,11 +124,12 @@
         android:gravity="center"
         android:paddingHorizontal="15dp"
         android:orientation="vertical">
+
         <Button
             android:id="@+id/btnD"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Button D"/>
+            tools:text="Button D" />
     </LinearLayout>
 
 </LinearLayout>
