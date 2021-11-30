@@ -2,8 +2,6 @@ package hu.eqn34f.retroquiz
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.preference.PreferenceManager
@@ -15,6 +13,7 @@ import hu.eqn34f.retroquiz.model.opentdb.Category
 import hu.eqn34f.retroquiz.model.opentdb.Question
 import hu.eqn34f.retroquiz.model.opentdb.QuestionType
 import hu.eqn34f.retroquiz.repository.OpenTdbRepository
+import hu.eqn34f.retroquiz.utils.PausableCountDownTimer
 import hu.eqn34f.retroquiz.utils.getEnumExtra
 import hu.eqn34f.retroquiz.utils.urlDecoded
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +37,7 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
 
     private lateinit var buttonList: List<Button>
 
-    private lateinit var timer: CountDownTimer
+    private lateinit var timer: PausableCountDownTimer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +74,7 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         val timeInMinutes = (prefs.getString("time_limit","6")?.toIntOrNull()) ?: 6
         val timeFormat = resources.getString(R.string.time_format);
-        timer = object:CountDownTimer((timeInMinutes * 60000).toLong(), 1000){
+        timer = object: PausableCountDownTimer((timeInMinutes * 60000).toLong(), 1000){
             override fun onTick(p0: Long) {
                 val totalSeconds = p0 / 1000;
                 val minutes = totalSeconds / 60;
@@ -88,7 +87,7 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
                     supportFragmentManager, AnswerDialogFragment.TAG
                 )
             }
-        }.start()
+        }
     }
 
 
@@ -97,6 +96,7 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
 
         buttonList.forEach {
             it.setOnClickListener { btn ->
+                timer.pause()
                 val answer = btn.tag as? Answer
                 if (answer != null) {
                     if (answer.correct) {
@@ -148,12 +148,13 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
             buttonList[index].text = answer.text
             buttonList[index].tag = answer
         }
-
+        timer.resume()
     }
 
     private fun NextQuestion() {
         GlobalScope.launch(Dispatchers.Main) {
             // show loading screen
+            timer.pause()
             binding.progressBar.visibility = View.VISIBLE
             buttonList.forEach { it.isEnabled = false }
 
