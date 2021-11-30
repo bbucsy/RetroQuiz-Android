@@ -8,7 +8,6 @@ import hu.eqn34f.retroquiz.data.model.opentdb.ResponseCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import java.lang.Exception
 import java.util.*
 import kotlin.random.Random
 

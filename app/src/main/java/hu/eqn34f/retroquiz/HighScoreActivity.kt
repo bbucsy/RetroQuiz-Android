@@ -6,10 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import hu.eqn34f.retroquiz.adapter.HighScoreAdapter
 import hu.eqn34f.retroquiz.data.HighScoreDatabase
 import hu.eqn34f.retroquiz.databinding.ActivityHighScoreBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlin.concurrent.thread
 
 class HighScoreActivity : AppCompatActivity() {

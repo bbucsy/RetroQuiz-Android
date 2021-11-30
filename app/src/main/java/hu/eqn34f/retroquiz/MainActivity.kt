@@ -2,8 +2,8 @@ package hu.eqn34f.retroquiz
 
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import hu.eqn34f.retroquiz.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -20,16 +20,15 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-    private fun setButtonListeners(){
+    private fun setButtonListeners() {
         binding.btnPlay.setOnClickListener {
-            startActivity(Intent(this,DifficultySelectActivity::class.java))
+            startActivity(Intent(this, DifficultySelectActivity::class.java))
         }
         binding.btnOpions.setOnClickListener {
-            startActivity(Intent(this,SettingsActivity::class.java))
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
         binding.btnHighscore.setOnClickListener {
-            startActivity(Intent(this,HighScoreActivity::class.java))
+            startActivity(Intent(this, HighScoreActivity::class.java))
         }
     }
 }
