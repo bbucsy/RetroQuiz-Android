@@ -9,6 +9,7 @@ import android.widget.Button
 import androidx.preference.PreferenceManager
 import hu.eqn34f.retroquiz.databinding.ActivityGameBinding
 import hu.eqn34f.retroquiz.fragment.AnswerDialogFragment
+import hu.eqn34f.retroquiz.fragment.NetworkErrorDialogFragment
 import hu.eqn34f.retroquiz.model.GameDifficulty
 import hu.eqn34f.retroquiz.model.opentdb.Category
 import hu.eqn34f.retroquiz.model.opentdb.Question
@@ -21,7 +22,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragmentListener {
+class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragmentListener, NetworkErrorDialogFragment.NetworkErrorDialogListener {
 
     private lateinit var binding: ActivityGameBinding
 
@@ -153,14 +154,15 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
     private fun NextQuestion() {
         GlobalScope.launch(Dispatchers.Main) {
             // show loading screen
-            level++
             binding.progressBar.visibility = View.VISIBLE
             buttonList.forEach { it.isEnabled = false }
 
             // get questions
             val questionResult = repository.getNextQuestion(playerScore)
             if (questionResult.isFailure) {
-                Log.w("REPOSITORY", "Error with repository")
+                    NetworkErrorDialogFragment(questionResult.exceptionOrNull()).show(
+                        supportFragmentManager, NetworkErrorDialogFragment.TAG
+                    )
             } else if (questionResult.isSuccess) {
                 val question = questionResult.getOrNull()
                 ShowQuestion(question!!)
@@ -177,6 +179,11 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
     data class Answer(val text: String, val correct: Boolean, val question: Question)
 
     override fun onNextQuestion() {
+        level++
+        NextQuestion()
+    }
+
+    override fun onRetry() {
         NextQuestion()
     }
 

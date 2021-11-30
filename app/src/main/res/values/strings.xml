@@ -16,5 +16,11 @@
 
     <string name="time_format">%1$02d:%2$02d</string>
     <string name="game_time_title">Game time limit (minutes)</string>
+    <string name="network_error_opentdb">There was an error while requesting a question from Open Trivia DB. Do you wish to retry?</string>
+    <string name="network_error_title">Ooops, something went wrong</string>
+    <string name="dialog_exit">Main menu</string>
+    <string name="dialog_retry">Retry</string>
+    <string name="dialog_next">Next question</string>
+    <string name="btn_show_error_message">Show error message</string>
 
 </resources>
