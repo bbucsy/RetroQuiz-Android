@@ -67,7 +67,6 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
     //set up question repository with the allowed categories and difficulty setting
     private fun setupRepository() {
 
-        // general knowledge must be in the set, and it can't be disabled in the settings
         val allowedCategories = prefs.getStringSet("allowed_categories", mutableSetOf())
             ?.map { cat ->
                 // use elvis operator and General knowledge for null safety
