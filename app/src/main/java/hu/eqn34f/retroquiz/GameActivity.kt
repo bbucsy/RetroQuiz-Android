@@ -207,7 +207,6 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
     }
 
 
-
     override fun onBackPressed() {
         AlertDialog.Builder(this)
             .setMessage(getString(R.string.exit_confirm_message))
