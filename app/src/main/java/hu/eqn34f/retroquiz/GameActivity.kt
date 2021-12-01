@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import hu.eqn34f.retroquiz.data.HighScoreDatabase
@@ -27,6 +28,9 @@ import kotlin.concurrent.thread
 
 class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragmentListener,
     NetworkErrorDialogFragment.NetworkErrorDialogListener {
+
+    //This is attached to a button, so the listener knows if the answer was right
+    data class Answer(val text: String, val correct: Boolean, val question: Question)
 
     private lateinit var binding: ActivityGameBinding
 
@@ -202,8 +206,15 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
         }
     }
 
-    //This is attached to a button, so the listener knows if the answer was right
-    data class Answer(val text: String, val correct: Boolean, val question: Question)
+
+
+    override fun onBackPressed() {
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.exit_confirm_message))
+            .setPositiveButton(getString(R.string.exit_confirm_ok)) { _, _ -> onFinishGame() }
+            .setNegativeButton(getString(R.string.exit_confirm_cancel), null)
+            .show()
+    }
 
     override fun onNextQuestion() {
         questionNumber++
@@ -220,7 +231,7 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
             val db = HighScoreDatabase.getDatabase(applicationContext).HighScoreDao()
             db.insert(
                 HighScore(
-                    name = prefs.getString("player_name", null) ?: "John Doe",
+                    name = prefs.getString("player_name", null) ?: getString(R.string.default_name),
                     score = playerScore,
                     time = timer.timeInMinutes
                 )

@@ -32,5 +32,9 @@
     <string name="dialog_title_wrong">Not enough Time</string>
     <string name="dialog_title_timeup">Oops</string>
     <string name="highscore_time_category_format">%s min</string>
+    <string name="exit_confirm_message">Are you sure you want to exit?</string>
+    <string name="exit_confirm_ok">Ok</string>
+    <string name="exit_confirm_cancel">Cancel</string>
+    <string name="default_name">John Doe</string>
 
 </resources>

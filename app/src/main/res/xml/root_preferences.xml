@@ -11,7 +11,7 @@
 
 
         <EditTextPreference
-            android:defaultValue="John Doe"
+            android:defaultValue="@string/default_name"
             android:inputType="text"
             android:key="player_name"
             android:title="@string/game_player_name_title" />
