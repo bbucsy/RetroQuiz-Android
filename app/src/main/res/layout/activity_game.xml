@@ -3,16 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="10"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="10">
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:indeterminate="true" />
+        android:indeterminate="true"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,8 +27,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            tools:text="Score: 0"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="Score: 0" />
 
         <TextView
             android:id="@+id/txtTime"
@@ -36,8 +36,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            tools:text="5:00"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="5:00" />
 
         <TextView
             android:id="@+id/txtDifficulty"
@@ -45,8 +45,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            tools:text="Difficulty: Hard"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="Difficulty: Hard" />
 
     </LinearLayout>
 
@@ -55,21 +55,21 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:text="Question #0"
         android:gravity="center"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:text="Question #0" />
 
     <TextView
         android:id="@+id/txtQuestion"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
+        android:paddingHorizontal="25dp"
+        android:paddingTop="25dp"
+        android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textAlignment="center"
-        android:paddingTop="25dp"
-        android:paddingHorizontal="25dp"
         tools:text="Which movie contains the quote, &quot;Say hello to my little friend!&quot;?" />
 
     <LinearLayout
@@ -77,8 +77,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:paddingHorizontal="15dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingHorizontal="15dp">
 
         <Button
             android:id="@+id/btnA"
@@ -92,8 +92,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:paddingHorizontal="15dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingHorizontal="15dp">
 
         <Button
             android:id="@+id/btnB"
@@ -107,8 +107,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:paddingHorizontal="15dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingHorizontal="15dp">
 
         <Button
             android:id="@+id/btnC"
@@ -122,8 +122,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:paddingHorizontal="15dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingHorizontal="15dp">
 
         <Button
             android:id="@+id/btnD"

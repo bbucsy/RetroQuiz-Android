@@ -10,7 +10,8 @@ import androidx.fragment.app.DialogFragment
 import hu.eqn34f.retroquiz.R
 import hu.eqn34f.retroquiz.databinding.DialogAnswerBinding
 
-class AnswerDialogFragment(private val state: DialogState, private val correct: String = "") : DialogFragment() {
+class AnswerDialogFragment(private val state: DialogState, private val correct: String = "") :
+    DialogFragment() {
     interface AnswerDialogFragmentListener {
         fun onNextQuestion()
         fun onFinishGame()
@@ -41,9 +42,10 @@ class AnswerDialogFragment(private val state: DialogState, private val correct: 
         binding = DialogAnswerBinding.inflate(LayoutInflater.from(context))
         binding.txtMain.text = getMainText()
         binding.txtCorrect.text = correct
-        binding.txtCorrect.visibility = if(state == DialogState.WrongAnswer)  View.VISIBLE else View.GONE
+        binding.txtCorrect.visibility =
+            if (state == DialogState.WrongAnswer) View.VISIBLE else View.GONE
 
-        val dialog =  AlertDialog.Builder(requireContext())
+        val dialog = AlertDialog.Builder(requireContext())
             .setTitle(getTitle())
             .setView(binding.root)
             .setNegativeButton(resources.getString(R.string.dialog_exit)) { _, _ ->
@@ -51,7 +53,7 @@ class AnswerDialogFragment(private val state: DialogState, private val correct: 
             }
 
         // if the state is not TimeUp then the user can go to the next question
-        if(state != DialogState.TimeUp)
+        if (state != DialogState.TimeUp)
             dialog.setPositiveButton(resources.getString(R.string.dialog_next)) { _, _ ->
                 listener.onNextQuestion()
             }

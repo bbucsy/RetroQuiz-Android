@@ -2,7 +2,7 @@ package hu.eqn34f.retroquiz.data.model.opentdb
 
 import com.google.gson.annotations.SerializedName
 
-enum class Category(val id: Int){
+enum class Category(val id: Int) {
     @SerializedName("General%20Knowledge")
     GeneralKnowledge(9),
 

@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="15dp">
 
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/network_error_opentdb"
-        android:textSize="20sp"
         android:gravity="center"
         android:paddingBottom="20dp"
+        android:text="@string/network_error_opentdb"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <Switch
@@ -32,6 +31,7 @@
         android:layout_height="match_parent"
         android:paddingVertical="15dp"
         tools:ignore="SpeakableTextPresentCheck">
+
         <TextView
             android:id="@+id/error_message"
             android:layout_width="match_parent"
@@ -42,12 +42,10 @@
             android:textColor="@color/error_red"
             android:textSize="20sp"
             android:textStyle="bold|italic"
-            tools:ignore="SpeakableTextPresentCheck"
             android:visibility="invisible"
+            tools:ignore="SpeakableTextPresentCheck"
             tools:text="Error on line 152" />
     </ScrollView>
-
-
 
 
 </LinearLayout>

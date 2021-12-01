@@ -3,22 +3,21 @@ package hu.eqn34f.retroquiz.data.model.opentdb
 import com.google.gson.annotations.SerializedName
 
 data class Question(
-    val category : Category,
-    val type : QuestionType,
-    val difficulty : Difficulty,
-    val question : String,
+    val category: Category,
+    val type: QuestionType,
+    val difficulty: Difficulty,
+    val question: String,
 
     @SerializedName("correct_answer")
-    val correctAnswer : String,
+    val correctAnswer: String,
 
     @SerializedName("incorrect_answers")
-    val incorrectAnswers : List<String>,
-)
-{
+    val incorrectAnswers: List<String>,
+) {
     //returns the value of the question based on difficulty
     val points: Int
         get() {
-            return when(difficulty){
+            return when (difficulty) {
                 Difficulty.NORMAL -> 3
                 Difficulty.EASY -> 2
                 Difficulty.HARD -> 5

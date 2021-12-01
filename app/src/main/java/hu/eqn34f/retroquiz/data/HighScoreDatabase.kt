@@ -7,9 +7,10 @@ import androidx.room.RoomDatabase
 import hu.eqn34f.retroquiz.data.model.HighScore
 
 @Database(entities = [HighScore::class], version = 1)
-abstract class HighScoreDatabase: RoomDatabase() {
+abstract class HighScoreDatabase : RoomDatabase() {
 
     abstract fun HighScoreDao(): HighScoreDao
+
     companion object {
         fun getDatabase(applicationContext: Context): HighScoreDatabase {
             return Room.databaseBuilder(

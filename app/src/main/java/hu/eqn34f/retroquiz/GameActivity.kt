@@ -56,7 +56,7 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
         difficulty = intent.getEnumExtra<GameDifficulty>() ?: GameDifficulty.ADAPTIVE
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-        binding.txtScore.text = String.format( getString(R.string.game_score_format), playerScore)
+        binding.txtScore.text = String.format(getString(R.string.game_score_format), playerScore)
 
         setupRepository()
         setUpButtonListeners()
@@ -136,7 +136,8 @@ class GameActivity : AppCompatActivity(), AnswerDialogFragment.AnswerDialogFragm
                     }
                 }
                 // update score ui
-                binding.txtScore.text = String.format( getString(R.string.game_score_format), playerScore)
+                binding.txtScore.text =
+                    String.format(getString(R.string.game_score_format), playerScore)
             }
         }
     }

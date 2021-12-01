@@ -10,7 +10,8 @@ import hu.eqn34f.retroquiz.R
 import hu.eqn34f.retroquiz.data.model.HighScore
 import hu.eqn34f.retroquiz.databinding.ItemHighScoreBinding
 
-class HighScoreAdapter(private val context: Context) : RecyclerView.Adapter<HighScoreAdapter.HighScoreViewHolder>() {
+class HighScoreAdapter(private val context: Context) :
+    RecyclerView.Adapter<HighScoreAdapter.HighScoreViewHolder>() {
 
     private val scores = mutableListOf<HighScore>()
 
@@ -30,11 +31,13 @@ class HighScoreAdapter(private val context: Context) : RecyclerView.Adapter<High
             txtName.text = item.name
             txtScore.text = item.score.toString()
 
-            if(position == 0 || item.time != scores[position-1].time){
+            if (position == 0 || item.time != scores[position - 1].time) {
                 header.visibility = View.VISIBLE
-                headerText.text = String.format(context.getString(R.string.highscore_time_category_format),item.time)
-            }
-            else{
+                headerText.text = String.format(
+                    context.getString(R.string.highscore_time_category_format),
+                    item.time
+                )
+            } else {
                 header.visibility = View.GONE
             }
         }
@@ -48,7 +51,7 @@ class HighScoreAdapter(private val context: Context) : RecyclerView.Adapter<High
         scores.apply {
             clear()
             addAll(highscores)
-            sortWith(compareBy<HighScore> {it.time} .thenByDescending { it.score } )
+            sortWith(compareBy<HighScore> { it.time }.thenByDescending { it.score })
         }
         notifyDataSetChanged()
     }
